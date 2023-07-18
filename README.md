@@ -1,7 +1,7 @@
 # Dev01 MS Exchange statistics module helper
 
 ```shell
-dev01-ms-exchange.exe -addr=[:8090] -app.url=http://dev01.com/api/fw -app.secret=[secret word]
+dev01-ms-exchange.exe -http.addr=[:8090] -app.url=http://dev01.com/api/fw -app.secret=[secret word]
 ```
 
 ```shell

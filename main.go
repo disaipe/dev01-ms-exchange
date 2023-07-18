@@ -100,7 +100,7 @@ func main() {
 
 	rpc.Config.SetServiceSettings(
 		"dev01-exchange",
-		"Dev01 Exchaing mailbox size monitor daemon",
+		"Dev01 Exchange mailbox size monitor daemon",
 		"The part of the Dev01 platform",
 	)
 
