@@ -3,9 +3,10 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"io"
-	"log"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 
 	rpc "github.com/disaipe/dev01-rpc-base"
@@ -56,20 +57,25 @@ var rpcAction = rpc.ActionFunction(func(rpcServer *rpc.Rpc, body io.ReadCloser, 
 			var resultError string
 			var mailboxItems []MailBoxItem
 
-			cmd := exec.Command("powershell.exe", "-nologo", "-noprofile", "-NonInteractive", "-ExecutionPolicy", "ByPass", "-OutputFormat", "Text", "-File", "./getMailboxSizes.ps1")
+			scriptPath := filepath.Join(rpc.Config.GetWorkingDir(), "getMailboxSizes.ps1")
+			rpc.Logger.Debug().Msgf("Script path: %s", scriptPath)
+
+			cmd := exec.Command("powershell.exe", "-nologo", "-noprofile", "-NonInteractive", "-ExecutionPolicy", "ByPass", "-OutputFormat", "Text", "-File", scriptPath)
+			cmd.Dir = rpc.Config.GetWorkingDir()
+
 			out, err := cmd.CombinedOutput()
 
 			if err != nil {
-				log.Printf("Failed to start command: %v", err)
+				rpc.Logger.Error().Msgf("Failed to start command: %v", err)
 
 				resultStatus = false
-				resultError = err.Error()
+				resultError = fmt.Sprintf("Failed to start command: %v", err.Error())
 			} else {
 				cleanOut := regexp.MustCompile(`([^\pL\pM\pN\pP\pS\s]|\r\n)`).ReplaceAllLiteralString(string(out), "")
 				err = json.Unmarshal([]byte(cleanOut), &mailboxItems)
 
 				if err != nil {
-					log.Printf("Failed to make results: %v", err)
+					rpc.Logger.Error().Msgf("Failed to make results: %v", err)
 
 					resultStatus = false
 					resultError = err.Error()
