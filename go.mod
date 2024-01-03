@@ -3,7 +3,7 @@ module dev01-ms-exchange
 go 1.20
 
 require (
-	github.com/disaipe/dev01-rpc-base v1.0.7
+	github.com/disaipe/dev01-rpc-base v1.0.8
 	github.com/kardianos/service v1.2.2 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
